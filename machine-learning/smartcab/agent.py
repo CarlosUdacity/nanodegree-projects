@@ -52,8 +52,11 @@ class LearningAgent(Agent):
         # self.epsilon = float(1) / pow(self.time, 2)
 
         # 5th function
-        a = 0.05
-        self.epsilon -= a * math.exp(-1 * a * self.time)
+        # a = 0.05
+        # self.epsilon -= a * math.exp(-1 * a * self.time)
+
+        # 6th function
+        self.epsilon = math.exp(-0.015 * self.time)
 
         self.time += 1.0
 
