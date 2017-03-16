@@ -27,8 +27,18 @@ def xstr(s):
     return s
 
 
-def state_str(state):
+def state_str1(state):
     aux = xstr(state[0]) + '_' + xstr(state[1]['light']) + '_' + xstr(state[1]['oncoming']) + '_' + xstr(state[1]['left'])
+    aux = aux.replace("__", "_")
+
+    if aux[-1:] == "_":
+        aux = aux[:(len(aux) - 1)]
+
+    return aux
+
+
+def state_str2(state):
+    aux = xstr(state[0]) + '_' + xstr(state[1]) + '_' + xstr(state[2]) + '_' + xstr(state[3])
     aux = aux.replace("__", "_")
 
     if aux[-1:] == "_":

@@ -22,9 +22,8 @@ class LearningAgent(Agent):
         self.epsilon = epsilon  # Random exploration factor
         self.alpha = alpha  # Learning factor
 
-        self.time = 1
-
         # Set any additional class parameters as needed
+        self.time = 1
 
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
@@ -38,24 +37,6 @@ class LearningAgent(Agent):
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
 
-        # First function
-        # self.epsilon = self.epsilon - 0.05
-
-        # Second function => epsilon = a ^ t
-        # a = 0.5
-        # self.epsilon += a * math.log(a)
-
-        # Third function
-        # self.epsilon -= 2 / pow(self.time, 3)
-
-        # 4th function
-        # self.epsilon = float(1) / pow(self.time, 2)
-
-        # 5th function
-        # a = 0.05
-        # self.epsilon -= a * math.exp(-1 * a * self.time)
-
-        # 6th function
         self.epsilon = math.exp(-0.015 * self.time)
 
         self.time += 1.0
@@ -76,7 +57,7 @@ class LearningAgent(Agent):
         inputs = self.env.sense(self)  # Visual input - intersection light and traffic
         deadline = self.env.get_deadline(self)  # Remaining deadline
 
-        state = (waypoint, inputs)
+        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['left'])
 
         return state
 
@@ -85,7 +66,7 @@ class LearningAgent(Agent):
             maximum Q-value of all actions based on the 'state' the smartcab is in. """
 
         # Calculate the maximum Q-value of all actions for a given state
-        state_string = state_str(state)
+        state_string = state_str2(state)
         maxQ = max(self.Q[state_string].iteritems(), key=operator.itemgetter(1))[0]
 
         return maxQ
@@ -100,7 +81,7 @@ class LearningAgent(Agent):
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
 
-        state_string = state_str(state)
+        state_string = state_str2(state)
 
         if state_string not in self.Q:
             self.Q[state_string] = {}
@@ -145,7 +126,7 @@ class LearningAgent(Agent):
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
 
-        state_string = state_str(state)
+        state_string = state_str2(state)
 
         self.Q[state_string][action] = self.Q[state_string][action] + self.alpha * (
             reward - self.Q[state_string][action])
