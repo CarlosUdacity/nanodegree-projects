@@ -37,7 +37,7 @@ class LearningAgent(Agent):
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
 
-        self.epsilon = math.exp(-0.015 * self.time)
+        self.epsilon = math.exp(-0.010 * self.time)
 
         self.time += 1.0
 
@@ -67,7 +67,10 @@ class LearningAgent(Agent):
 
         # Calculate the maximum Q-value of all actions for a given state
         state_string = state_str2(state)
-        maxQ = max(self.Q[state_string].iteritems(), key=operator.itemgetter(1))[0]
+        #maxQ = max(self.Q[state_string].iteritems(), key=operator.itemgetter(1))[0]
+
+        possibilities = [key for key in self.Q[state_string] if self.Q[state_string][key] == max(self.Q[state_string].values())]
+        maxQ = random.choice(possibilities)
 
         return maxQ
 
