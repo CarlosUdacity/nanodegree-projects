@@ -1,8 +1,11 @@
+import pytest
+
 from sqlalchemy import create_engine
 import pandas as pd
 import json
 import time
 from multiprocessing import Pool as ThreadPool
+from functools import partial
 
 
 def load_df(sql_statement):
@@ -37,7 +40,7 @@ if run_c:
     pool = ThreadPool(12)
     results = pool.map(load_df, sqls)
     c = pd.concat(results)
-    print("Experiment C done: %d lines in %f seconds" % (c.shape[0], time.time() - tc))
+    tcf = time.time()
     pool.close()
     pool.join()
 
@@ -45,7 +48,7 @@ if run_a:
     # Load data in a single thread
     ta = time.time()
     a = pd.read_sql_query("SELECT * FROM auth_user", con=engine)
-    print("Experiment A done: %d lines in %f seconds" % (a.shape[0], time.time() - ta))
+    taf = time.time()
 
 if run_b:
     # Load data in a single thread, but in chunks
@@ -60,6 +63,11 @@ if run_b:
         if len(dfs[-1]) < chunk_size:
             break
     b = pd.concat(dfs)
-    print("Experiment B done: %d lines in %f seconds" % (b.shape[0], time.time() - tb))
+    tbf = time.time()
 
 
+def test_single_vs_multithread():
+    print("\nExperiment A done: %d lines in %f seconds" % (a.shape[0], taf - ta))
+    print("Experiment B done: %d lines in %f seconds" % (b.shape[0], tbf - tb))
+    print("Experiment C done: %d lines in %f seconds" % (c.shape[0], tcf - tc))
+    assert (tcf - tc) < (taf - ta)
