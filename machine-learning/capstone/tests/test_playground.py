@@ -9,7 +9,7 @@ from functools import partial
 
 
 def load_df(sql_statement):
-    return pd.read_sql_query(sql=sql_statement, con=conn_str)
+    return pd.read_sql_query(sql=sql_statement, con=create_engine(conn_str, pool_size=20))
 
 
 with open('db_connection.json') as data_file:
@@ -17,7 +17,7 @@ with open('db_connection.json') as data_file:
 
 conn_str = "postgresql://" + p["user"] + ":" + p["password"] + \
            "@" + p["netloc"] + ":" + str(p["port"]) + "/" + p["dbname"]
-engine = create_engine(conn_str)
+engine = create_engine(conn_str, pool_size=20)
 user_length = pd.read_sql_query("SELECT COUNT(id) AS count FROM auth_user", con=engine)['count'][0]
 
 run_a = True
