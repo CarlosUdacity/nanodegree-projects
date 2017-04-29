@@ -39,17 +39,27 @@ def load_auth_user(log=False):
     pool.join()
 
     if log:
-        print("Auth_user loaded: %d lines in %f seconds" % (c.shape[0], time.time() - tc))
+        print("\nauth_user loaded: %d lines in %f seconds" % (c.shape[0], time.time() - tc))
 
     return c
 
 
 def load_payment_app_product(log=False):
-    return pd.DataFrame()
+    x = pd.read_sql_query("SELECT * FROM payment_app_product", con=engine)
+    tc = time.time()
+    if log:
+        print("\npayment_app_product loaded: %d lines in %f seconds" % (
+            x.shape[0], time.time() - tc))
+    return x
 
 
 def load_payment_app_subscription(log=False):
-    return pd.DataFrame()
+    x = pd.read_sql_query("SELECT * FROM payment_app_subscription", con=engine)
+    tc = time.time()
+    if log:
+        print("\npayment_app_subscription loaded: %d lines in %f seconds" % (
+            x.shape[0], time.time() - tc))
+    return x
 
 
 def load_frontend_brazil_pages(log=False):
