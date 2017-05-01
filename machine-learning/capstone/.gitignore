@@ -1,5 +1,7 @@
 .idea
 .cache
+flow/__pycache__
 .ipynb_checkpoints
 tests/__pycache__
 db_connection.json
+*.h5
