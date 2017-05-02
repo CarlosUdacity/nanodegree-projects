@@ -2,9 +2,16 @@ from sqlalchemy import create_engine
 import pandas as pd
 import json
 import time
+import numpy as np
 from multiprocessing import Pool as ThreadPool
-
+import logging
 import flow as f
+
+logging.getLogger().setLevel(logging.DEBUG)
+
+x = f.load_frontend_brazil_pages(recursive=True)
+
+exit(0)
 
 ta = time.time()
 x = pd.read_sql_query("SELECT count(id) as count FROM frontend_brazil.pages",
