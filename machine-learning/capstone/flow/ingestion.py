@@ -273,22 +273,24 @@ def load_frontend_brazil_pages(rows_from_postgres=100000,
             raise ValueError("No maximum batch specified to ingest from "
                              "Postgres.")
 
-        sql = "SELECT * FROM frontend_brazil.pages " \
-              "WHERE received_at <= '%s' " \
-              "ORDER BY received_at ASC OFFSET %d" \
-              % (date_cutoff, offset)
         z = x.copy()
         td = time.time()
-        for chunk in pd.read_sql_query(sql, con=engine_ebdb,
+        for chunk in pd.read_sql_query("SELECT * FROM frontend_brazil.pages "
+                                       "WHERE received_at <= '%s' "
+                                       "ORDER BY received_at ASC "
+                                       "OFFSET %d" % (date_cutoff, offset),
+                                       con=engine_analytics,
                                        chunksize=rows_from_postgres):
             logging.info("frontend_brazil_pages chunk loaded from Postgres: "
                          "%d lines in %f seconds" % (chunk.shape[0], time.time() - td))
             z = z.append(chunk, ignore_index=True)
             td = time.time()
+            store['frontend_brazil_pages'] = z
+            logging.info("frontend_brazil_pages chunk stored into store.h5: "
+                         "%d lines in %f seconds" % (z.shape[0],
+                                                     time.time() - td))
+            td = time.time()
 
-        store['frontend_brazil_pages'] = z
-        logging.info("frontend_brazil_pages stored into store.h5: %d lines "
-                     "in %f seconds" % (z.shape[0], time.time() - tc))
         return z
 
 

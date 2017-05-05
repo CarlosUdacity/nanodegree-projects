@@ -5,3 +5,4 @@ flow/__pycache__
 tests/__pycache__
 db_connection.json
 *.h5
+data
