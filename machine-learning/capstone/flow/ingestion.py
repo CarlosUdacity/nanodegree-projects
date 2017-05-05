@@ -94,8 +94,7 @@ def load_frontend_brazil_pages(sample=False):
     """
     t = time.time()
     if not sample:
-        x = pd.read_csv('data/analytics_frontend_brazil_pages.csv',
-                        low_memory=False)
+        x = pd.read_csv('data/analytics_frontend_brazil_pages.csv')
     else:
         x = pd.read_csv('data/analytics_frontend_brazil_pages.csv',
                         nrows=574799, low_memory=False)
@@ -105,6 +104,17 @@ def load_frontend_brazil_pages(sample=False):
 
 
 def load_frontend_brazil_identifies(sample=False):
+    """Load data from all Brazilian anonymous visitors
+
+    This function loads data from all Brazilian anonymous visitors.
+    
+    Args:
+        sample (:obj:`bool`, optional): If `True`, returns only 10% of data
+
+    Returns:
+        pandas.core.frame.DataFrame: Dataframe containing all data
+
+    """
     t = time.time()
     if not sample:
         x = pd.read_csv('data/analytics_frontend_brazil_identifies.csv',
@@ -118,6 +128,17 @@ def load_frontend_brazil_identifies(sample=False):
 
 
 def load_frontend_brazil_tracks(sample=False):
+    """Load all data from Segment
+
+    This function loads all data from Segment.
+    
+    Args:
+        sample (:obj:`bool`, optional): If `True`, returns only 10% of data
+
+    Returns:
+        pandas.core.frame.DataFrame: Dataframe containing all data
+
+    """
     t = time.time()
     if not sample:
         x = pd.read_csv('data/analytics_frontend_brazil_tracks.csv',
@@ -131,6 +152,14 @@ def load_frontend_brazil_tracks(sample=False):
 
 
 def load_brazil_events_signup():
+    """Load data from all Brazilian webinars
+
+    This function loads data from all Brazilian webinars.
+    
+    Returns:
+        pandas.core.frame.DataFrame: Dataframe containing all data
+
+    """
     t = time.time()
     x = pd.read_csv('data/analytics_brazil_events_event_sign_up.csv',
                     low_memory=False)
@@ -140,6 +169,14 @@ def load_brazil_events_signup():
 
 
 def load_analytics_tables_course_enrollments():
+    """Load data from all Brazilian free course enrollments
+
+    This function loads data from all Brazilian free course enrollments.
+    
+    Returns:
+        pandas.core.frame.DataFrame: Dataframe containing all data
+
+    """
     t = time.time()
     x = pd.read_csv('data/analytics_analytics_tables_'
                     'course_enrollments_br.csv')
@@ -148,5 +185,17 @@ def load_analytics_tables_course_enrollments():
     return x
 
 
-def load_zendesk_data(sample=False):
-    return pd.DataFrame()
+def load_zendesk_data():
+    """Load data from Zendesk
+
+    This function loads data from Zendesk.
+    
+    Returns:
+        pandas.core.frame.DataFrame: Dataframe containing all data
+
+    """
+    t = time.time()
+    x = pd.read_csv('data/zendesk_export.csv')
+    logging.info("zendesk_export loaded: %d lines in %f "
+                 "seconds" % (x.shape[0], time.time() - t))
+    return x

@@ -23,7 +23,7 @@ def test_load_payment_app_subscription():
 
 
 def test_load_frontend_brazil_pages():
-    # assert flow.load_frontend_brazil_pages().shape[0] > 0
+    assert flow.load_frontend_brazil_pages().shape[0] > 0
     assert flow.load_frontend_brazil_pages(sample=True).shape[0] > 0
 
 
@@ -33,7 +33,7 @@ def test_load_frontend_brazil_identifies():
 
 
 def test_load_frontend_brazil_tracks():
-    # assert flow.load_frontend_brazil_tracks().shape[0] > 0
+    assert flow.load_frontend_brazil_tracks().shape[0] > 0
     assert flow.load_frontend_brazil_tracks(sample=True).shape[0] > 0
 
 
@@ -47,4 +47,3 @@ def test_load_analytics_tables_course_enrollments():
 
 def test_load_zendesk_data():
     assert flow.load_zendesk_data().shape[0] > 0
-    assert flow.load_zendesk_data(sample=True).shape[0] > 0
