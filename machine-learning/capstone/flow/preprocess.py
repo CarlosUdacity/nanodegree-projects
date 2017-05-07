@@ -2,18 +2,46 @@
 import pandas as pd
 import time
 import logging
+from datetime import datetime
 from .ingestion import *
 
 
 def get_features(email):
-    x = auth_user.loc[lambda df: (df.email == email) & (df["is_superuser"] ==
-                                                        False), :].squeeze()
+    result = pd.Series()
+
+    # Retrieve basic account data
+    account = auth_user.loc[lambda df: (df.email == email) &
+                                       (df["is_superuser"] == False),
+                            :].squeeze()
+    logging.info(account)
+    result['email'] = account.email
+    result['user_id'] = account.username
 
     # All data must be until became paying student, if that's the case
+    anonymous_ids = frontend_brazil_pages.loc[lambda df: df.user_id == account.
+                                              username, :]['anonymous_id']\
+        .unique()
+    visits = frontend_brazil_pages.loc[lambda df: df['anonymous_id'].isin(
+                                       anonymous_ids)]\
+        .sort_values('received_at')
+    first_visit = visits.iloc[0].squeeze()
+    logging.info(first_visit)
 
     # Days from 1st visit to signup
+    if anonymous_ids.shape[0] == 0:  # No data
+        result['days_from_first_visit_to_signup'] = None
+    else:
+        d0 = datetime.strptime(first_visit.received_at, '%Y-%m-%d %H:%M:%S.%f')
+        d1 = datetime.strptime(account.date_joined, '%Y-%m-%d %H:%M:%S.%f')
+        result['days_from_first_visit_to_signup'] = (d1 - d0).days
 
     # Referrer from first visit
+    if anonymous_ids.shape[0] == 0:  # No data
+        result['referrer_from_first_visit'] = None
+    else:
+        x = first_visit.context_page_referrer
+        logging.info(type(x))
+        result['referrer_from_first_visit'] = first_visit.context_page_referrer
 
     # % of visits coming from Google, Facebook, email, etc
 
@@ -47,6 +75,4 @@ def get_features(email):
 
     # Name is in email
 
-
-
-    return x
+    return result

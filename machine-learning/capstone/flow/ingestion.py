@@ -102,18 +102,74 @@ def load_frontend_brazil_pages(sample=False):
                                              'pages.csv')
     t = time.time()
     if not sample:
-        x = pd.read_csv(abs_file_path)
+        x = pd.read_csv(abs_file_path,
+                        dtype={'context_page_referrer': str,
+                               'context_campaign_medium': str,
+                               'context_campaign_name': str,
+                               'context_campaign_source': str,
+                               'context_campaign_expid': str,
+                               'context_campaign_content': str,
+                               'context_campaign_term': str,
+                               'context_campaign_campaingn': str,
+                               'context_campaign_utm_campaign': str,
+                               'context_campaign_utm_content': str,
+                               'context_campaign_utm_medium': str,
+                               'context_campaign_utm_term': str,
+                               'context_campaign_referrer': str,
+                               'context_traits_email': str,
+                               'context_traits_first_name': str,
+                               'context_traits_last_name': str,
+                               'context_campaign_campilaign': str,
+                               'context_campaign_aprempaign': str,
+                               'context_campaign_cammapaign': str,
+                               'context_campaign_sgloource': str,
+                               'context_campaign_sjurce': str,
+                               'context_campaign_contentutm_medium': str,
+                               'context_campaign_xmedium': str,
+                               'context_campaign_ca5uu_c3_b9mparign': str,
+                               'context_campaign_camparign': str,
+                               'context_campaign_mediuuy87ym': str,
+                               'context_campaign_20term': str})
     else:
-        x = pd.read_csv(abs_file_path, nrows=574799, low_memory=False)
+        x = pd.read_csv(abs_file_path, nrows=574799,
+                        dtype={'context_page_referrer': str,
+                               'context_campaign_medium': str,
+                               'context_campaign_name': str,
+                               'context_campaign_source': str,
+                               'context_campaign_expid': str,
+                               'context_campaign_content': str,
+                               'context_campaign_term': str,
+                               'context_campaign_campaingn': str,
+                               'context_campaign_utm_campaign': str,
+                               'context_campaign_utm_content': str,
+                               'context_campaign_utm_medium': str,
+                               'context_campaign_utm_term': str,
+                               'context_campaign_referrer': str,
+                               'context_traits_email': str,
+                               'context_traits_first_name': str,
+                               'context_traits_last_name': str,
+                               'context_campaign_campilaign': str,
+                               'context_campaign_aprempaign': str,
+                               'context_campaign_cammapaign': str,
+                               'context_campaign_sgloource': str,
+                               'context_campaign_sjurce': str,
+                               'context_campaign_contentutm_medium': str,
+                               'context_campaign_xmedium': str,
+                               'context_campaign_ca5uu_c3_b9mparign': str,
+                               'context_campaign_camparign': str,
+                               'context_campaign_mediuuy87ym': str,
+                               'context_campaign_20term': str})
     logging.info("frontend_brazil_pages loaded: %d lines in %f "
                  "seconds" % (x.shape[0], time.time() - t))
     return x
 
 
 def load_frontend_brazil_identifies(sample=False):
-    """Load data from all Brazilian anonymous visitors
+    """DEPRECATED - Load data from all Brazilian anonymous visitors
 
     This function loads data from all Brazilian anonymous visitors.
+    THIS FUNCTION IS DEPRECATED AS IT DOES NOT CONTAIN ALL DATA.
+    DO NOT USE THIS FUNCTION
     
     Args:
         sample (:obj:`bool`, optional): If `True`, returns only 10% of data
@@ -211,5 +267,6 @@ def load_zendesk_data():
     return x
 
 
-auth_user = load_auth_user()
-auth_user_sample = load_auth_user(sample=True)
+auth_user = load_auth_user(sample=True)
+# frontend_brazil_identifies = load_frontend_brazil_identifies()
+frontend_brazil_pages = load_frontend_brazil_pages(sample=True)

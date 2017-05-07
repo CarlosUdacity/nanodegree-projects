@@ -8,8 +8,10 @@ from .context import flow
 logging.getLogger().setLevel(logging.DEBUG)
 
 
-def test_feature_engineering():
-    x = flow.get_features('carlos@udacity.com')
+def test_feature_engineering_with_user_data():
+    # random_email = flow.auth_user['email'].sample().iloc[0]
+    random_email = 'carlos@udacity.com'
+    x = flow.get_features(random_email)
 
     assert isinstance(x, pd.Series)
     assert x.size > 0
@@ -49,3 +51,9 @@ def test_feature_engineering():
     assert 'gave_last_name' in x.index.values
     assert 'levendish_distance_first_name_from_email' in x.index.values
     assert 'levendish_distance_last_name_from_email' in x.index.values
+
+
+def test_feature_engineering_with_incomplete_user_data():
+    random_email = 'use email with no identifies data'
+    # x = flow.get_features(random_email)
+    assert False
