@@ -3,6 +3,8 @@ python:
   - "2.7"
   - "3.6"
 # command to install dependencies
-install: "pip install -r machine-learning/capstone/requirements.txt"
+install: 
+  - "pip install -r machine-learning/capstone/test_requirements.txt"
+  - "pip install -r machine-learning/capstone/requirements.txt"
 # command to run tests
 script: pytest machine-learning/capstone/tests/
