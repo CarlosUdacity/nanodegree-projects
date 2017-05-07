@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import create_engine
 import pandas as pd
-import json
 import time
 import logging
 
@@ -199,3 +197,7 @@ def load_zendesk_data():
     logging.info("zendesk_export loaded: %d lines in %f "
                  "seconds" % (x.shape[0], time.time() - t))
     return x
+
+
+auth_user = load_auth_user()
+auth_user_sample = load_auth_user(sample=True)
