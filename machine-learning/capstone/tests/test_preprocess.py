@@ -17,22 +17,22 @@ def test_feature_engineering_with_user_data():
     assert x.size > 0
     assert 'days_from_first_visit_to_signup' in x.index.values
     assert 'referrer_from_first_visit' in x.index.values
-    assert 'perc_of_visits_from_organic' in x.index.values
-    assert 'perc_of_visits_from_email' in x.index.values
-    assert 'perc_of_visits_from_google' in x.index.values
-    assert 'perc_of_visits_from_facebook' in x.index.values
-    assert 'perc_of_visits_from_others' in x.index.values
     assert 'perc_of_visits_from_mobile' in x.index.values
+    # assert 'perc_of_visits_from_organic' in x.index.values
+    # assert 'perc_of_visits_from_email' in x.index.values
+    # assert 'perc_of_visits_from_google' in x.index.values
+    # assert 'perc_of_visits_from_facebook' in x.index.values
+    # assert 'perc_of_visits_from_others' in x.index.values
     assert 'number_of_webinar_enrollments' in x.index.values
     assert 'number_of_free_course_enrollments' in x.index.values
-    assert 'number_of_visits' in x.index.values
-    assert 'number_of_weekday_visits' in x.index.values
-    assert 'number_of_weekend_visits' in x.index.values
-    assert 'number_of_morning_visits' in x.index.values
-    assert 'number_of_noon_visits' in x.index.values
-    assert 'number_of_afternoon_visits' in x.index.values
-    assert 'number_of_nighttime_visits' in x.index.values
-    assert 'number_of_midnight_visits' in x.index.values
+    # assert 'number_of_visits' in x.index.values
+    # assert 'number_of_weekday_visits' in x.index.values
+    # assert 'number_of_weekend_visits' in x.index.values
+    # assert 'number_of_morning_visits' in x.index.values
+    # assert 'number_of_noon_visits' in x.index.values
+    # assert 'number_of_afternoon_visits' in x.index.values
+    # assert 'number_of_nighttime_visits' in x.index.values
+    # assert 'number_of_midnight_visits' in x.index.values
     assert 'number_of_ndop_visits' in x.index.values
     assert 'number_of_fcop_visits' in x.index.values
     assert 'number_of_signin_visits' in x.index.values

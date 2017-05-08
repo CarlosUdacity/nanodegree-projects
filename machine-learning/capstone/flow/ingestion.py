@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import numpy as np
 import time
 import logging
 import os
@@ -267,6 +268,10 @@ def load_zendesk_data():
     return x
 
 
+logging.getLogger().setLevel(logging.DEBUG)
+
 auth_user = load_auth_user(sample=True)
-# frontend_brazil_identifies = load_frontend_brazil_identifies()
-frontend_brazil_pages = load_frontend_brazil_pages(sample=True)
+frontend_brazil_pages = load_frontend_brazil_pages(sample=True)\
+    .replace(np.nan, '', regex=True)
+brazil_events_signup = load_brazil_events_signup()
+table_course_enrollments = load_analytics_tables_course_enrollments()

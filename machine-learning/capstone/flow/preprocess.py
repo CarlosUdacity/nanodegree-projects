@@ -2,6 +2,7 @@
 import pandas as pd
 import time
 import logging
+import re
 from datetime import datetime
 from .ingestion import *
 
@@ -13,7 +14,6 @@ def get_features(email):
     account = auth_user.loc[lambda df: (df.email == email) &
                                        (df["is_superuser"] == False),
                             :].squeeze()
-    logging.info(account)
     result['email'] = account.email
     result['user_id'] = account.username
 
@@ -25,7 +25,11 @@ def get_features(email):
                                        anonymous_ids)]\
         .sort_values('received_at')
     first_visit = visits.iloc[0].squeeze()
-    logging.info(first_visit)
+
+    webinar_enrollments = brazil_events_signup.loc[lambda df: df.email == email
+                                                   , :]
+    course_enrollments = table_course_enrollments.loc[lambda df: df.user_id ==
+                                                      account.username, :]
 
     # Days from 1st visit to signup
     if anonymous_ids.shape[0] == 0:  # No data
@@ -39,19 +43,33 @@ def get_features(email):
     if anonymous_ids.shape[0] == 0:  # No data
         result['referrer_from_first_visit'] = None
     else:
-        x = first_visit.context_page_referrer
-        logging.info(type(x))
         result['referrer_from_first_visit'] = first_visit.context_page_referrer
+
+    # % of visits coming from Mobile vs. Desktop
+    if anonymous_ids.shape[0] == 0:  # No data
+        result['perc_of_visits_from_mobile'] = None
+    else:
+        grouped = visits.groupby('context_user_agent')
+        counts = grouped.count()['id']
+        total = 0
+        for index, value in counts.iteritems():
+            found = re.search('/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMo'
+                              'bile|Opera Mini/', index)
+            if found is not None:
+                total += value
+
+        result['perc_of_visits_from_mobile'] = total / counts.sum()
 
     # % of visits coming from Google, Facebook, email, etc
 
-    # % of visits coming from Mobile vs. Desktop
-
     # Number of webinar enrollments
+    result['number_of_webinar_enrollments'] = webinar_enrollments.shape[0]
 
     # Number of free course enrollments
+    result['number_of_free_course_enrollments'] = course_enrollments.shape[0]
 
     # Number of visits
+    result['number_of_visits'] = visits.shape[0]
 
     # Number of weekday / weekend visits
 
@@ -75,4 +93,5 @@ def get_features(email):
 
     # Name is in email
 
+    logging.info(result)
     return result
