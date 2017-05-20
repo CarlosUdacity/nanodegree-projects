@@ -5,15 +5,20 @@ import logging
 import re
 from datetime import datetime
 from .ingestion import *
+import os
+
+
+script_dir = os.path.join(os.path.dirname(__file__), '../')
 
 
 def get_features(email):
+    t = time.time()
     result = pd.Series()
 
     # Retrieve basic account data
-    account = auth_user.loc[lambda df: (df.email == email) &
+    account = auth_user.loc[lambda df: (df['email'] == email) &
                                        (df["is_superuser"] == False),
-                            :].squeeze()
+                            :].iloc[0].squeeze()
     result['email'] = account.email
     result['user_id'] = account.username
 
@@ -24,7 +29,10 @@ def get_features(email):
     visits = frontend_brazil_pages.loc[lambda df: df['anonymous_id'].isin(
                                        anonymous_ids)]\
         .sort_values('received_at')
-    first_visit = visits.iloc[0].squeeze()
+    if visits.shape[0] > 0:
+        first_visit = visits.iloc[0].squeeze()
+    else:
+        first_visit = None
 
     webinar_enrollments = brazil_events_signup.loc[lambda df: df.email == email
                                                    , :]
@@ -35,8 +43,8 @@ def get_features(email):
     if anonymous_ids.shape[0] == 0:  # No data
         result['days_from_first_visit_to_signup'] = None
     else:
-        d0 = datetime.strptime(first_visit.received_at, '%Y-%m-%d %H:%M:%S.%f')
-        d1 = datetime.strptime(account.date_joined, '%Y-%m-%d %H:%M:%S.%f')
+        d0 = datetime.strptime(first_visit.received_at.split(".")[0], '%Y-%m-%d %H:%M:%S')
+        d1 = datetime.strptime(account.date_joined.split(".")[0], '%Y-%m-%d %H:%M:%S')
         result['days_from_first_visit_to_signup'] = (d1 - d0).days
 
     # Referrer from first visit
@@ -78,10 +86,37 @@ def get_features(email):
     # Number of visits in key pages
     # - NDOPs
     # - FCOPs
-    # - Sign-in
     # - Catalog
+    # - Sign-in
     # - 50% back
     # - Checkout
+    number_of_ndop_visits = 0
+    number_of_catalog_visits = 0
+    number_of_fcop_visits = 0
+    number_of_signin_visits = 0
+    number_of_50_back_visits = 0
+    number_of_checkout_visits = 0
+    for x in visits['context_page_path']:
+        if "--nd" in x:
+            number_of_ndop_visits += 1
+        if "courses/all" in x:
+            number_of_catalog_visits += 1
+        if "--ud" in x:
+            number_of_fcop_visits += 1
+        if "signin" in x:
+            number_of_signin_visits += 1
+        if "50-back" in x:
+            number_of_50_back_visits += 1
+        if "checkout" in x:
+            number_of_checkout_visits += 1
+
+    result['number_of_ndop_visits'] = number_of_ndop_visits
+    result['number_of_catalog_visits'] = number_of_catalog_visits
+    result['number_of_fcop_visits'] = number_of_fcop_visits
+    result['number_of_signin_visits'] = number_of_signin_visits
+    result['number_of_50_back_visits'] = number_of_50_back_visits
+    result['number_of_checkout_visits'] = number_of_checkout_visits
+
 
     # Number of inquires on Zendesk
 
@@ -93,5 +128,36 @@ def get_features(email):
 
     # Name is in email
 
+    # Is the student a paying student?
+    subscriptions = table_payment_app_subscription.loc[lambda df:
+                                                       df.user_id == account.
+                                                       username, :]
+    if subscriptions.shape[0] > 0:
+        result['is_paying_student'] = 1
+    else:
+        result['is_paying_student'] = 0
+
     logging.info(result)
+    logging.info("Time to generate features: %d" % (time.time() - t))
     return result
+
+
+def create_features(save_to_csv=True, save_to_hdf5=False):
+    abs_file_path = os.path.join(script_dir, 'features.csv')
+    emails = auth_user['email']
+
+    x = pd.DataFrame(columns=get_features('carlos@udacity.com').index.values)
+
+    for index, email in enumerate(emails):
+        # x.append(f.get_features(email), ignore_index=True)
+        logging.info("INDEX: %d   -   USER: %s" % (index, email))
+        x.loc[index] = get_features(email).values
+
+    if save_to_csv:
+        x.to_csv(abs_file_path)
+
+    if save_to_hdf5:
+        store = pd.HDFStore('store.h5')
+        store['features'] = x
+
+    return x

@@ -4,6 +4,7 @@ import numpy as np
 import time
 import logging
 import os
+import sys
 
 """Ingestion Module
 
@@ -81,7 +82,10 @@ def load_payment_app_subscription():
     abs_file_path = os.path.join(script_dir, 'data/ebdb_public_payment_app_'
                                              'historicalsubscription.csv')
     t = time.time()
-    x = pd.read_csv(abs_file_path, low_memory=False)
+    x = pd.read_csv(abs_file_path,
+                    dtype={
+                        'user_id': str
+                    }) #low_memory=False)
     logging.info("payment_app_historicalsubscription loaded: %d lines in %f "
                  "seconds" % (x.shape[0], time.time() - t))
     return x
@@ -104,7 +108,8 @@ def load_frontend_brazil_pages(sample=False):
     t = time.time()
     if not sample:
         x = pd.read_csv(abs_file_path,
-                        dtype={'context_page_referrer': str,
+                        dtype={'context_page_path': str,
+                               'context_page_referrer': str,
                                'context_campaign_medium': str,
                                'context_campaign_name': str,
                                'context_campaign_source': str,
@@ -133,7 +138,8 @@ def load_frontend_brazil_pages(sample=False):
                                'context_campaign_20term': str})
     else:
         x = pd.read_csv(abs_file_path, nrows=574799,
-                        dtype={'context_page_referrer': str,
+                        dtype={'context_page_path': str,
+                               'context_page_referrer': str,
                                'context_campaign_medium': str,
                                'context_campaign_name': str,
                                'context_campaign_source': str,
@@ -270,8 +276,9 @@ def load_zendesk_data():
 
 logging.getLogger().setLevel(logging.DEBUG)
 
-auth_user = load_auth_user(sample=True)
-frontend_brazil_pages = load_frontend_brazil_pages(sample=True)\
+auth_user = load_auth_user(sample=False)
+frontend_brazil_pages = load_frontend_brazil_pages(sample=False)\
     .replace(np.nan, '', regex=True)
 brazil_events_signup = load_brazil_events_signup()
 table_course_enrollments = load_analytics_tables_course_enrollments()
+table_payment_app_subscription = load_payment_app_subscription()
