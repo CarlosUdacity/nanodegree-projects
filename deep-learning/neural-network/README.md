@@ -5,6 +5,7 @@ This project implements a simple **single-layer feed-forward network**, or **sin
 ![single_layer_perceptron](https://user-images.githubusercontent.com/19690196/29979427-c76ebff8-8f1b-11e7-9f1a-1f1a796a8e90.png)
 
 We trained our neural network using 4 samples with 3 features:
+<br/>
 <img src="http://latex.codecogs.com/gif.latex?\begin{bmatrix}&space;0&space;&&space;0&space;&&space;1\\&space;1&space;&&space;1&space;&&space;1\\&space;1&space;&&space;0&space;&&space;1\\&space;0&space;&&space;1&space;&&space;1&space;\end{bmatrix}" title="\begin{bmatrix} 0 & 0 & 1\\ 1 & 1 & 1\\ 1 & 0 & 1\\ 0 & 1 & 1 \end{bmatrix}" />
 <br/>
 and considered the following output:
