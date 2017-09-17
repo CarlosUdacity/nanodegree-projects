@@ -15,10 +15,10 @@
       <file leaf-file-name="2-cats-dogs-tutorial.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/2-cats-dogs-tutorial.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-723">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="791">
+              <caret line="106" column="1" lean-forward="true" selection-start-line="90" selection-start-column="0" selection-end-line="106" selection-end-column="1" />
               <folding>
-                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -197,12 +197,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1505625050761</updated>
-      <workItem from="1505625052691" duration="234000" />
+      <workItem from="1505625052691" duration="3307000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="234000" />
+    <option name="totallyTimeSpent" value="3307000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-158" y="-1057" width="1920" height="1057" extended-state="0" />
@@ -251,10 +251,10 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/2-cats-dogs-tutorial.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-723">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="791">
+          <caret line="106" column="1" lean-forward="true" selection-start-line="90" selection-start-column="0" selection-end-line="106" selection-end-column="1" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
