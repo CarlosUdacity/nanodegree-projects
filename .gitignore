@@ -5,4 +5,6 @@
 deep-learning/image-classification/cifar-10-batches-py/*
 deep-learning/image-classification/preprocess*
 deep-learning/image-classification/*.tar.gz
+deep-learning/embeddings/data
+deep-learning/embeddings/*.zip
 
